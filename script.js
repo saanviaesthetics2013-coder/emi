@@ -5,10 +5,20 @@ const panelContent = document.getElementById("panelContent");
 const emyBubble = document.getElementById("emyBubble");
 const appGrid = document.getElementById("appGrid");
 
-/* ---------- SOUND SYSTEM (No download needed) ---------- */
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+/* ===============================
+   SOUND SYSTEM (No downloads)
+   =============================== */
+let audioCtx = null;
 
-function playClickSound(freq = 440) {
+function ensureAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+function playClickSound(freq = 520) {
+  ensureAudio();
+
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
 
@@ -24,7 +34,9 @@ function playClickSound(freq = 440) {
   osc.stop(audioCtx.currentTime + 0.08);
 }
 
-/* ---------- EMMY TYPING EFFECT ---------- */
+/* ===============================
+   EMMY TYPING EFFECT
+   =============================== */
 let typingInterval = null;
 
 function emy(text) {
@@ -39,7 +51,9 @@ function emy(text) {
   }, 18);
 }
 
-/* ---------- CLOCK ---------- */
+/* ===============================
+   CLOCK
+   =============================== */
 function updateClock() {
   clock.innerText = new Date().toLocaleTimeString("en-US", {
     hour: "2-digit",
@@ -49,8 +63,9 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-/* ---------- APP SYSTEM ---------- */
-
+/* ===============================
+   APPS DATABASE
+   =============================== */
 const defaultApps = [
   { id: "crafts", title: "Craft Studio", desc: "Paper craft tutorials step-by-step.", tag: "Creative" },
   { id: "encyclopedia", title: "Mini Encyclopedia", desc: "Search anything using Wikipedia.", tag: "Wikipedia" },
@@ -59,18 +74,21 @@ const defaultApps = [
   { id: "notes", title: "Notes", desc: "Write notes saved automatically.", tag: "Storage" },
   { id: "voice", title: "Voice Detector", desc: "Detect speech using microphone.", tag: "Speech" },
   { id: "fakenews", title: "Fake News Detector", desc: "Analyze headlines + Wikipedia support.", tag: "AI-style", danger: true },
+  { id: "games", title: "Games Hub", desc: "Play multiple games inside NeuraLib.", tag: "Fun" },
   { id: "appstore", title: "App Store", desc: "Install extra apps into your OS.", tag: "Install" },
   { id: "credits", title: "Credits", desc: "System ending page.", tag: "Final" }
 ];
 
 const storeApps = [
   { id: "calculator", title: "Calculator", desc: "Basic calculator app.", tag: "Tool" },
-  { id: "snake", title: "Snake Game", desc: "Classic snake game.", tag: "Game" },
   { id: "mood", title: "Mood Tracker", desc: "Track your daily mood.", tag: "Wellness" }
 ];
 
 let installedApps = JSON.parse(localStorage.getItem("installedApps")) || [];
 
+/* ===============================
+   GRID RENDER
+   =============================== */
 function renderGrid() {
   appGrid.innerHTML = "";
 
@@ -98,17 +116,18 @@ function renderGrid() {
 
 renderGrid();
 
-/* ---------- PANEL SYSTEM ---------- */
+/* ===============================
+   PANEL SYSTEM
+   =============================== */
 function openPanel(app) {
-  panel.classList.remove("hidden");
-  panel.classList.add("show");
+  playClickSound(560);
 
-  playClickSound(520);
+  panel.classList.remove("hidden");
 
   if (app === "crafts") {
     panelTitle.innerText = "Craft Studio";
     panelContent.innerHTML = craftsHTML();
-    emy("This is the craft studio. Choose a craft.");
+    emy("Welcome to Craft Studio. Choose a craft.");
   }
 
   if (app === "encyclopedia") {
@@ -120,53 +139,52 @@ function openPanel(app) {
   if (app === "worldclock") {
     panelTitle.innerText = "World Clock";
     panelContent.innerHTML = worldClockHTML();
-    emy("Choose a country to view its live time.");
+    emy("Choose a country or city to see its time.");
     setupWorldClock();
   }
 
   if (app === "paint") {
     panelTitle.innerText = "Paint App";
     panelContent.innerHTML = paintHTML();
-    emy("Draw freely using this paint app.");
+    emy("Draw freely. Choose brush size and color.");
     setupPaint();
   }
 
   if (app === "notes") {
     panelTitle.innerText = "Notes";
     panelContent.innerHTML = notesHTML();
-    emy("Write your notes. They are saved automatically.");
+    emy("Your notes will be saved automatically.");
     setupNotes();
   }
 
   if (app === "voice") {
     panelTitle.innerText = "Voice Detector";
     panelContent.innerHTML = voiceHTML();
-    emy("Click start and speak. I will detect your voice.");
+    emy("Press start and speak.");
   }
 
   if (app === "fakenews") {
     panelTitle.innerText = "Fake News Detector";
     panelContent.innerHTML = fakeNewsHTML();
-    emy("Paste a headline. I will analyze it using Wikipedia.");
+    emy("Paste a headline. I will analyze it.");
+  }
+
+  if (app === "games") {
+    panelTitle.innerText = "Games Hub";
+    panelContent.innerHTML = gamesHTML();
+    emy("Choose a game from the hub.");
   }
 
   if (app === "appstore") {
     panelTitle.innerText = "App Store";
     panelContent.innerHTML = appStoreHTML();
-    emy("Install apps to expand your system.");
+    emy("Install apps to expand your OS.");
   }
 
   if (app === "calculator") {
     panelTitle.innerText = "Calculator";
     panelContent.innerHTML = calculatorHTML();
-    emy("A simple calculator.");
-  }
-
-  if (app === "snake") {
-    panelTitle.innerText = "Snake Game";
-    panelContent.innerHTML = snakeHTML();
-    emy("Use arrow keys to play.");
-    setupSnake();
+    emy("A simple calculator tool.");
   }
 
   if (app === "mood") {
@@ -184,13 +202,14 @@ function openPanel(app) {
 }
 
 function closePanel() {
-  playClickSound(280);
-  panel.classList.remove("show");
-  setTimeout(() => panel.classList.add("hidden"), 250);
+  playClickSound(240);
+  panel.classList.add("hidden");
   emy("Choose another app from the dashboard.");
 }
 
-/* ---------- APP STORE ---------- */
+/* ===============================
+   APP STORE
+   =============================== */
 function appStoreHTML() {
   return `
     <h3>Available Apps</h3>
@@ -222,7 +241,7 @@ function installApp(appId) {
     localStorage.setItem("installedApps", JSON.stringify(installedApps));
     renderGrid();
     panelContent.innerHTML = appStoreHTML();
-    playClickSound(700);
+    playClickSound(800);
     emy("Installed successfully.");
   }
 }
@@ -232,15 +251,19 @@ function uninstallApp(appId) {
   localStorage.setItem("installedApps", JSON.stringify(installedApps));
   renderGrid();
   panelContent.innerHTML = appStoreHTML();
-  playClickSound(200);
+  playClickSound(220);
   emy("Uninstalled.");
 }
 
-/* ---------- Crafts ---------- */
+/* ===============================
+   CRAFT STUDIO
+   =============================== */
 const craftsDB = [
   { title: "Paper Butterfly", steps: ["Fold paper", "Draw wings", "Cut carefully", "Decorate", "Hang with thread"] },
   { title: "Paper Plane", steps: ["Fold in half", "Fold corners", "Fold nose", "Fold wings", "Fly it"] },
-  { title: "Origami Heart", steps: ["Fold diagonally", "Fold corners", "Shape top", "Flatten", "Decorate"] }
+  { title: "Origami Heart", steps: ["Fold diagonally", "Fold corners", "Shape top", "Flatten", "Decorate"] },
+  { title: "Paper Star", steps: ["Cut strips", "Tie a knot", "Fold sides", "Inflate gently", "Shape star"] },
+  { title: "Mini Paper Box", steps: ["Fold square", "Crease edges", "Open folds", "Form box", "Decorate"] }
 ];
 
 function craftsHTML() {
@@ -271,7 +294,9 @@ function showCraft(i) {
   emy("Here are the steps for " + craft.title);
 }
 
-/* ---------- Encyclopedia ---------- */
+/* ===============================
+   ENCYCLOPEDIA (WIKIPEDIA)
+   =============================== */
 function encyclopediaHTML() {
   return `
     <h3>Search Wikipedia</h3>
@@ -312,20 +337,53 @@ async function wikiSearch() {
   }
 }
 
-/* ---------- World Clock ---------- */
+/* ===============================
+   WORLD CLOCK (MORE OPTIONS)
+   =============================== */
 function worldClockHTML() {
   return `
+    <h3>Select Country / City</h3>
+
     <select id="tzSelect">
-      <option value="Asia/Kolkata">India</option>
+      <option value="Asia/Kolkata">India (Kolkata)</option>
+      <option value="Asia/Dubai">UAE (Dubai)</option>
+      <option value="Asia/Singapore">Singapore</option>
+      <option value="Asia/Tokyo">Japan (Tokyo)</option>
+      <option value="Asia/Seoul">South Korea (Seoul)</option>
+      <option value="Asia/Shanghai">China (Shanghai)</option>
+      <option value="Asia/Jakarta">Indonesia (Jakarta)</option>
+      <option value="Asia/Bangkok">Thailand (Bangkok)</option>
+      <option value="Asia/Kathmandu">Nepal (Kathmandu)</option>
+
+      <option value="Australia/Sydney">Australia (Sydney)</option>
+      <option value="Pacific/Auckland">New Zealand (Auckland)</option>
+
+      <option value="Europe/London">UK (London)</option>
+      <option value="Europe/Paris">France (Paris)</option>
+      <option value="Europe/Rome">Italy (Rome)</option>
+      <option value="Europe/Berlin">Germany (Berlin)</option>
+      <option value="Europe/Madrid">Spain (Madrid)</option>
+      <option value="Europe/Amsterdam">Netherlands (Amsterdam)</option>
+      <option value="Europe/Moscow">Russia (Moscow)</option>
+
       <option value="America/New_York">USA (New York)</option>
-      <option value="Europe/London">UK</option>
-      <option value="Europe/Paris">France</option>
-      <option value="Europe/Rome">Italy</option>
-      <option value="Asia/Tokyo">Japan</option>
-      <option value="Australia/Sydney">Australia</option>
+      <option value="America/Los_Angeles">USA (Los Angeles)</option>
+      <option value="America/Chicago">USA (Chicago)</option>
+      <option value="America/Denver">USA (Denver)</option>
+      <option value="America/Toronto">Canada (Toronto)</option>
+      <option value="America/Vancouver">Canada (Vancouver)</option>
+      <option value="America/Mexico_City">Mexico (Mexico City)</option>
+      <option value="America/Sao_Paulo">Brazil (São Paulo)</option>
+      <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
+
+      <option value="Africa/Cairo">Egypt (Cairo)</option>
+      <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
+      <option value="Africa/Nairobi">Kenya (Nairobi)</option>
+      <option value="Africa/Lagos">Nigeria (Lagos)</option>
     </select>
+
     <div style="margin-top:18px;">
-      <h1 id="worldTime" style="font-size:42px;">--:--</h1>
+      <h1 id="worldTime" style="font-size:44px;">--:--</h1>
     </div>
   `;
 }
@@ -344,12 +402,15 @@ function setupWorldClock() {
   setInterval(tick, 1000);
 }
 
-/* ---------- Paint ---------- */
+/* ===============================
+   PAINT APP
+   =============================== */
 function paintHTML() {
   return `
     <input type="color" id="paintColor" value="#7fd6d2" />
     <input type="range" id="paintSize" min="2" max="30" value="7" />
     <button onclick="paintClear()">Clear</button>
+
     <canvas id="paintCanvas" width="900" height="320"
       style="margin-top:14px;border-radius:18px;background:white;width:100%;"></canvas>
   `;
@@ -386,7 +447,9 @@ function paintClear() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-/* ---------- Notes ---------- */
+/* ===============================
+   NOTES
+   =============================== */
 function notesHTML() {
   return `<textarea id="notesBox" style="height:300px;" placeholder="Write your notes..."></textarea>`;
 }
@@ -400,7 +463,9 @@ function setupNotes() {
   };
 }
 
-/* ---------- Voice Detector ---------- */
+/* ===============================
+   VOICE DETECTOR
+   =============================== */
 function voiceHTML() {
   return `
     <button onclick="startVoice()">Start Listening</button>
@@ -438,7 +503,9 @@ function stopVoice() {
   emy("Stopped listening.");
 }
 
-/* ---------- Fake News Detector + Wikipedia ---------- */
+/* ===============================
+   FAKE NEWS DETECTOR + WIKIPEDIA
+   =============================== */
 function fakeNewsHTML() {
   return `
     <textarea id="newsInput" style="height:140px;" placeholder="Paste headline or paragraph..."></textarea>
@@ -458,11 +525,15 @@ async function analyzeNews() {
 
   out.innerText = "Analyzing...";
 
-  let score = 80;
+  let score = 85;
   let reasons = [];
 
-  const badWords = ["shocking", "secret", "they don't want you to know", "miracle", "breaking", "unbelievable"];
-  badWords.forEach(w => {
+  const clickbait = [
+    "shocking", "secret", "miracle", "breaking", "unbelievable",
+    "they don't want you to know", "exposed", "truth revealed"
+  ];
+
+  clickbait.forEach(w => {
     if (input.toLowerCase().includes(w)) {
       score -= 12;
       reasons.push("Clickbait phrase: " + w);
@@ -480,16 +551,16 @@ async function analyzeNews() {
   }
 
   try {
-    const query = input.split(" ").slice(0, 4).join(" ");
+    const query = input.split(" ").slice(0, 5).join(" ");
     const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
     const res = await fetch(url);
     const data = await res.json();
 
     if (data.extract) {
-      score += 12;
+      score += 15;
       reasons.push("Wikipedia contains related topic information.");
     } else {
-      score -= 12;
+      score -= 15;
       reasons.push("Wikipedia did not confirm this topic.");
     }
   } catch {
@@ -514,102 +585,50 @@ async function analyzeNews() {
   emy("Fake news analysis complete.");
 }
 
-/* ---------- Calculator ---------- */
-function calculatorHTML() {
+/* ===============================
+   GAMES HUB (MULTIPLE GAMES)
+   =============================== */
+function gamesHTML() {
   return `
-    <input id="calcDisplay" disabled value="0" style="font-size:22px;text-align:right;" />
+    <h3>Choose a Game</h3>
 
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;">
-      ${["7","8","9","/",
-         "4","5","6","*",
-         "1","2","3","-",
-         "0",".","=","+"].map(b => `
-        <button onclick="calcPress('${b}')">${b}</button>
-      `).join("")}
-    </div>
+    <button onclick="openGame('snake')">Snake</button>
+    <button onclick="openGame('tictactoe')">Tic Tac Toe</button>
+    <button onclick="openGame('rps')">Rock Paper Scissors</button>
+    <button onclick="openGame('memory')">Memory Cards</button>
 
-    <button style="margin-top:12px;" onclick="calcClear()">Clear</button>
+    <div id="gameArea" style="margin-top:16px;">---</div>
   `;
 }
 
-let calcValue = "";
+function openGame(game) {
+  const area = document.getElementById("gameArea");
 
-function calcPress(btn) {
-  const display = document.getElementById("calcDisplay");
-
-  if (btn === "=") {
-    try {
-      calcValue = eval(calcValue).toString();
-    } catch {
-      calcValue = "Error";
-    }
-    display.value = calcValue;
-    return;
+  if (game === "snake") {
+    area.innerHTML = snakeHTML();
+    setupSnake();
+    emy("Snake game loaded.");
   }
 
-  calcValue += btn;
-  display.value = calcValue;
-}
-
-function calcClear() {
-  calcValue = "";
-  document.getElementById("calcDisplay").value = "0";
-}
-
-/* ---------- Mood Tracker ---------- */
-function moodHTML() {
-  return `
-    <h3>How are you feeling today?</h3>
-    <select id="moodSelect">
-      <option>Happy</option>
-      <option>Calm</option>
-      <option>Sad</option>
-      <option>Angry</option>
-      <option>Motivated</option>
-      <option>Tired</option>
-    </select>
-
-    <button onclick="saveMood()">Save Mood</button>
-
-    <div id="moodHistory" style="margin-top:14px;">---</div>
-  `;
-}
-
-function setupMood() {
-  renderMoodHistory();
-}
-
-function saveMood() {
-  const mood = document.getElementById("moodSelect").value;
-  const history = JSON.parse(localStorage.getItem("moodHistory")) || [];
-
-  history.unshift({
-    mood,
-    date: new Date().toLocaleString()
-  });
-
-  localStorage.setItem("moodHistory", JSON.stringify(history));
-  renderMoodHistory();
-  emy("Mood saved.");
-}
-
-function renderMoodHistory() {
-  const history = JSON.parse(localStorage.getItem("moodHistory")) || [];
-  const box = document.getElementById("moodHistory");
-
-  if (history.length === 0) {
-    box.innerText = "No mood logs yet.";
-    return;
+  if (game === "tictactoe") {
+    area.innerHTML = ticTacToeHTML();
+    setupTicTacToe();
+    emy("Tic Tac Toe ready.");
   }
 
-  box.innerHTML = `
-    <ul style="padding-left:18px;line-height:1.7;">
-      ${history.slice(0, 10).map(h => `<li><b>${h.mood}</b> — ${h.date}</li>`).join("")}
-    </ul>
-  `;
+  if (game === "rps") {
+    area.innerHTML = rpsHTML();
+    emy("Choose rock, paper or scissors.");
+  }
+
+  if (game === "memory") {
+    area.innerHTML = memoryHTML();
+    setupMemory();
+    emy("Match the cards.");
+  }
 }
 
-/* ---------- Snake Game ---------- */
+/* ---------- Snake ---------- */
 function snakeHTML() {
   return `
     <p style="opacity:0.8;">Use arrow keys. Eat food. Don't crash.</p>
@@ -676,12 +695,285 @@ function setupSnake() {
   }, 140);
 }
 
-/* ---------- Credits ---------- */
+/* ---------- TicTacToe ---------- */
+function ticTacToeHTML() {
+  return `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin-top:10px;" id="tttBoard"></div>
+    <div id="tttStatus" style="margin-top:14px;font-weight:800;">Player X turn</div>
+    <button onclick="resetTicTacToe()">Reset</button>
+  `;
+}
+
+let tttState = Array(9).fill("");
+let tttPlayer = "X";
+
+function setupTicTacToe() {
+  renderTTT();
+}
+
+function renderTTT() {
+  const board = document.getElementById("tttBoard");
+  const status = document.getElementById("tttStatus");
+
+  board.innerHTML = "";
+
+  tttState.forEach((cell, i) => {
+    const btn = document.createElement("button");
+    btn.style.height = "80px";
+    btn.style.fontSize = "26px";
+    btn.innerText = cell || "";
+    btn.onclick = () => playTTT(i);
+    board.appendChild(btn);
+  });
+
+  status.innerText = "Player " + tttPlayer + " turn";
+}
+
+function playTTT(i) {
+  if (tttState[i]) return;
+
+  tttState[i] = tttPlayer;
+  playClickSound(650);
+
+  const winPatterns = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  for (let p of winPatterns) {
+    const [a,b,c] = p;
+    if (tttState[a] && tttState[a] === tttState[b] && tttState[b] === tttState[c]) {
+      document.getElementById("tttStatus").innerText = "Winner: " + tttState[a];
+      emy("Winner is " + tttState[a]);
+      return;
+    }
+  }
+
+  if (!tttState.includes("")) {
+    document.getElementById("tttStatus").innerText = "Draw!";
+    emy("It's a draw.");
+    return;
+  }
+
+  tttPlayer = tttPlayer === "X" ? "O" : "X";
+  renderTTT();
+}
+
+function resetTicTacToe() {
+  tttState = Array(9).fill("");
+  tttPlayer = "X";
+  renderTTT();
+  emy("Reset done.");
+}
+
+/* ---------- Rock Paper Scissors ---------- */
+function rpsHTML() {
+  return `
+    <button onclick="playRPS('rock')">Rock</button>
+    <button onclick="playRPS('paper')">Paper</button>
+    <button onclick="playRPS('scissors')">Scissors</button>
+    <div id="rpsResult" style="margin-top:14px;font-weight:800;">---</div>
+  `;
+}
+
+function playRPS(user) {
+  const options = ["rock", "paper", "scissors"];
+  const cpu = options[Math.floor(Math.random() * options.length)];
+  const resultBox = document.getElementById("rpsResult");
+
+  let result = "";
+
+  if (user === cpu) result = "Draw!";
+  else if (
+    (user === "rock" && cpu === "scissors") ||
+    (user === "paper" && cpu === "rock") ||
+    (user === "scissors" && cpu === "paper")
+  ) result = "You Win!";
+  else result = "You Lose!";
+
+  playClickSound(740);
+  resultBox.innerHTML = `You: <b>${user}</b> | CPU: <b>${cpu}</b><br>${result}`;
+}
+
+/* ---------- Memory Game ---------- */
+function memoryHTML() {
+  return `
+    <p style="opacity:0.8;">Match all pairs.</p>
+    <div id="memoryBoard" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:320px;margin-top:12px;"></div>
+    <div id="memoryStatus" style="margin-top:14px;font-weight:800;">---</div>
+    <button onclick="setupMemory()">Restart</button>
+  `;
+}
+
+let memoryCards = [];
+let memoryFlipped = [];
+let memoryMatched = 0;
+
+function setupMemory() {
+  const icons = ["🌸","🌸","⭐","⭐","🍓","🍓","🐧","🐧","🌙","🌙","💎","💎","🎀","🎀","🍀","🍀"];
+  memoryCards = icons.sort(() => Math.random() - 0.5);
+  memoryFlipped = [];
+  memoryMatched = 0;
+
+  const board = document.getElementById("memoryBoard");
+  const status = document.getElementById("memoryStatus");
+
+  board.innerHTML = "";
+  status.innerText = "Start matching!";
+
+  memoryCards.forEach((icon, i) => {
+    const btn = document.createElement("button");
+    btn.style.height = "70px";
+    btn.style.fontSize = "22px";
+    btn.innerText = "❓";
+    btn.onclick = () => flipMemory(i, btn);
+    board.appendChild(btn);
+  });
+
+  emy("Memory game started.");
+}
+
+function flipMemory(i, btn) {
+  if (memoryFlipped.length === 2) return;
+  if (btn.innerText !== "❓") return;
+
+  btn.innerText = memoryCards[i];
+  memoryFlipped.push({ i, btn });
+
+  playClickSound(620);
+
+  if (memoryFlipped.length === 2) {
+    const a = memoryFlipped[0];
+    const b = memoryFlipped[1];
+
+    if (memoryCards[a.i] === memoryCards[b.i]) {
+      memoryMatched += 2;
+      memoryFlipped = [];
+      document.getElementById("memoryStatus").innerText = "Matched!";
+
+      if (memoryMatched === memoryCards.length) {
+        document.getElementById("memoryStatus").innerText = "You won!";
+        emy("You completed the memory game!");
+      }
+    } else {
+      document.getElementById("memoryStatus").innerText = "Try again...";
+      setTimeout(() => {
+        a.btn.innerText = "❓";
+        b.btn.innerText = "❓";
+        memoryFlipped = [];
+      }, 700);
+    }
+  }
+}
+
+/* ===============================
+   CALCULATOR
+   =============================== */
+function calculatorHTML() {
+  return `
+    <input id="calcDisplay" disabled value="0" style="font-size:22px;text-align:right;" />
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;">
+      ${["7","8","9","/",
+         "4","5","6","*",
+         "1","2","3","-",
+         "0",".","=","+"].map(b => `
+        <button onclick="calcPress('${b}')">${b}</button>
+      `).join("")}
+    </div>
+
+    <button style="margin-top:12px;" onclick="calcClear()">Clear</button>
+  `;
+}
+
+let calcValue = "";
+
+function calcPress(btn) {
+  const display = document.getElementById("calcDisplay");
+
+  if (btn === "=") {
+    try {
+      calcValue = eval(calcValue).toString();
+    } catch {
+      calcValue = "Error";
+    }
+    display.value = calcValue;
+    return;
+  }
+
+  calcValue += btn;
+  display.value = calcValue;
+}
+
+function calcClear() {
+  calcValue = "";
+  document.getElementById("calcDisplay").value = "0";
+}
+
+/* ===============================
+   MOOD TRACKER
+   =============================== */
+function moodHTML() {
+  return `
+    <h3>How are you feeling today?</h3>
+    <select id="moodSelect">
+      <option>Happy</option>
+      <option>Calm</option>
+      <option>Sad</option>
+      <option>Angry</option>
+      <option>Motivated</option>
+      <option>Tired</option>
+    </select>
+
+    <button onclick="saveMood()">Save Mood</button>
+
+    <div id="moodHistory" style="margin-top:14px;">---</div>
+  `;
+}
+
+function setupMood() {
+  renderMoodHistory();
+}
+
+function saveMood() {
+  const mood = document.getElementById("moodSelect").value;
+  const history = JSON.parse(localStorage.getItem("moodHistory")) || [];
+
+  history.unshift({
+    mood,
+    date: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("moodHistory", JSON.stringify(history));
+  renderMoodHistory();
+  emy("Mood saved.");
+}
+
+function renderMoodHistory() {
+  const history = JSON.parse(localStorage.getItem("moodHistory")) || [];
+  const box = document.getElementById("moodHistory");
+
+  if (history.length === 0) {
+    box.innerText = "No mood logs yet.";
+    return;
+  }
+
+  box.innerHTML = `
+    <ul style="padding-left:18px;line-height:1.7;">
+      ${history.slice(0, 10).map(h => `<li><b>${h.mood}</b> — ${h.date}</li>`).join("")}
+    </ul>
+  `;
+}
+
+/* ===============================
+   CREDITS
+   =============================== */
 function creditsHTML() {
   return `
     <div style="text-align:center;margin-top:60px;">
       <h1 style="font-weight:950;letter-spacing:2px;">Created by Saanvi</h1>
-      <p style="opacity:0.7;margin-top:10px;">NeuraLib OS v6 • Dashboard Edition</p>
+      <p style="opacity:0.7;margin-top:10px;">NeuraLib OS v7</p>
     </div>
   `;
 }
