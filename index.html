@@ -3,10 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuraLib OS v8</title>
+  <title>NeuraLib OS Neon</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
 
- 
+  <!-- Background -->
+  <div class="bg">
+    <div class="grid"></div>
+    <div class="glow cyan"></div>
+    <div class="glow pink"></div>
+    <div class="glow purple"></div>
+    <div class="scanline"></div>
+  </div>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>NEURALIB OS</span>
+      <span class="version">v9 NEON</span>
+    </div>
+
+    <div class="top-actions">
+      <button class="miniBtn" onclick="toggleTheme()">Theme</button>
+      <div class="clock" id="clock">--:--</div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="layout">
+
+    <section class="hero">
+      <h1>NeuraLib OS</h1>
+      <p>Futuristic Neon Dashboard • Games • Tools • AI Experiments</p>
+      <div class="hero-tags">
+        <span>⚡ Neon UI</span>
+        <span>🎮 Gaming Hub</span>
+        <span>🌍 World Clock</span>
+        <span>🧠 Wiki Search</span>
+      </div>
+    </section>
+
+    <section class="apps" id="apps"></section>
+
+  </main>
+
+  <!-- Panel -->
+  <div class="panel hidden" id="panel">
+    <div class="panel-inner">
+      <div class="panel-top">
+        <h2 id="panelTitle">App</h2>
+        <button class="closeBtn" onclick="closePanel()">✕</button>
+      </div>
+      <div class="panel-content" id="panelContent"></div>
+    </div>
+  </div>
+
+  <!-- Emmy -->
+  <div class="emy">
+    <div class="emy-bubble" id="emyBubble">Hi, I'm Emmy — your guide.</div>
+    <div class="emy-body">
+      <div class="emy-face">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="lash left"></div>
+        <div class="lash right"></div>
+        <div class="blush left"></div>
+        <div class="blush right"></div>
+        <div class="beak"></div>
+      </div>
+      <div class="wing left"></div>
+      <div class="wing right"></div>
+      <div class="tail"></div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
