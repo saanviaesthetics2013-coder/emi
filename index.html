@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuraLib OS v6</title>
+  <title>NeuraLib OS v7</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
+
 <body>
 
-  <!-- Animated Wallpaper -->
+  <!-- Wallpaper -->
   <div class="wallpaper">
     <div class="orb cyan"></div>
     <div class="orb rose"></div>
@@ -16,25 +17,27 @@
     <div class="grain"></div>
   </div>
 
-  <!-- Header -->
+  <!-- Topbar -->
   <header class="topbar">
     <div class="logo">
       <span class="dot"></span>
       <span>NEURALIB OS</span>
     </div>
+
     <div class="time" id="clock">--:--</div>
   </header>
 
-  <!-- Main Grid -->
+  <!-- Grid -->
   <main class="grid" id="appGrid"></main>
 
   <!-- Panel -->
   <div class="panel hidden" id="panel">
-    <div class="panel-inner" id="panelInner">
+    <div class="panel-inner">
       <div class="panel-top">
         <h2 id="panelTitle">App</h2>
         <button class="closeBtn" onclick="closePanel()">✕</button>
       </div>
+
       <div class="panel-content" id="panelContent"></div>
     </div>
   </div>
@@ -42,18 +45,22 @@
   <!-- Emmy -->
   <div class="emy" id="emy">
     <div class="emy-bubble" id="emyBubble">Hi, I'm Emmy — your guide.</div>
+
     <div class="emy-body">
-      <div class="emy-face">
-        <div class="eye left"></div>
-        <div class="eye right"></div>
-        <div class="lash left"></div>
-        <div class="lash right"></div>
-        <div class="blush left"></div>
-        <div class="blush right"></div>
-        <div class="beak"></div>
-      </div>
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+
+      <div class="lash left"></div>
+      <div class="lash right"></div>
+
+      <div class="blush left"></div>
+      <div class="blush right"></div>
+
+      <div class="beak"></div>
+
       <div class="wing left"></div>
       <div class="wing right"></div>
+
       <div class="tail"></div>
     </div>
   </div>
