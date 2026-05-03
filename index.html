@@ -3,68 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuraLib OS v7</title>
+  <title>NeuraLib OS v8</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
 
-  <!-- Wallpaper -->
-  <div class="wallpaper">
-    <div class="orb cyan"></div>
-    <div class="orb rose"></div>
-    <div class="orb purple"></div>
-    <div class="grain"></div>
-  </div>
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <h1>NeuraLib OS</h1>
+      <p class="sub">Secure Aesthetic WebOS</p>
 
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="logo">
-      <span class="dot"></span>
-      <span>NEURALIB OS</span>
-    </div>
+      <input id="loginName" placeholder="Username (first time only)" />
+      <input id="loginPassword" type="password" placeholder="Password" />
 
-    <div class="time" id="clock">--:--</div>
-  </header>
-
-  <!-- Grid -->
-  <main class="grid" id="appGrid"></main>
-
-  <!-- Panel -->
-  <div class="panel hidden" id="panel">
-    <div class="panel-inner">
-      <div class="panel-top">
-        <h2 id="panelTitle">App</h2>
-        <button class="closeBtn" onclick="closePanel()">✕</button>
-      </div>
-
-      <div class="panel-content" id="panelContent"></div>
-    </div>
-  </div>
-
-  <!-- Emmy -->
-  <div class="emy" id="emy">
-    <div class="emy-bubble" id="emyBubble">Hi, I'm Emmy — your guide.</div>
-
-    <div class="emy-body">
-      <div class="eye left"></div>
-      <div class="eye right"></div>
-
-      <div class="lash left"></div>
-      <div class="lash right"></div>
-
-      <div class="blush left"></div>
-      <div class="blush right"></div>
-
-      <div class="beak"></div>
-
-      <div class="wing left"></div>
-      <div class="wing right"></div>
-
-      <div class="tail"></div>
-    </div>
-  </div>
-
-  <script src="./script.js"></script>
-</body>
-</html>
+      <button onclick="login()">Enter OS</button>
+      <p class="hint" id="login
