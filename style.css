@@ -18,32 +18,48 @@
 html, body {
   height: 100%;
   overflow-x: hidden;
-  background: black;
-  color: var(--text);
+  background: #070814 !important;
+  color: white;
 }
 
 /* Wallpaper */
 .wallpaper {
   position: fixed;
   inset: 0;
-  z-index: -1;
-  background: linear-gradient(135deg, #05060f, #0d1024, #1a1430);
+  z-index: -9999 !important;
+  background: linear-gradient(135deg, #05060f, #0d1024, #1a1430) !important;
   overflow: hidden;
 }
 
 .orb {
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: 540px;
+  height: 540px;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.6;
+  opacity: 0.65;
   animation: float 10s infinite ease-in-out;
 }
 
-.orb.cyan { background: var(--cyan); top: 10%; left: 10%; }
-.orb.rose { background: var(--rose); bottom: 10%; right: 10%; animation-delay: 2s; }
-.orb.purple { background: var(--purple); top: 35%; right: 30%; animation-delay: 4s; }
+.orb.cyan {
+  background: var(--cyan);
+  top: 10%;
+  left: 10%;
+}
+
+.orb.rose {
+  background: var(--rose);
+  bottom: 5%;
+  right: 10%;
+  animation-delay: 2s;
+}
+
+.orb.purple {
+  background: var(--purple);
+  top: 35%;
+  right: 30%;
+  animation-delay: 4s;
+}
 
 @keyframes float {
   0%,100% { transform: translate(0,0) scale(1); }
@@ -88,7 +104,7 @@ html, body {
   font-weight: 900;
   letter-spacing: 3px;
   font-size: 13px;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .dot {
@@ -100,7 +116,7 @@ html, body {
 
 .time {
   font-size: 14px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 /* Grid */
@@ -109,14 +125,16 @@ html, body {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 18px;
   padding: 22px;
+  position: relative;
+  z-index: 10;
 }
 
 /* Box */
 .box {
   padding: 18px;
   border-radius: 22px;
-  background: var(--glass);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
   backdrop-filter: blur(20px);
   cursor: pointer;
   transition: 0.25s ease;
@@ -132,9 +150,9 @@ html, body {
   inset: 0;
   opacity: 0;
   background: linear-gradient(135deg,
-    rgba(127,214,210,0.14),
-    rgba(217,164,178,0.12),
-    rgba(169,139,255,0.12)
+    rgba(127,214,210,0.16),
+    rgba(217,164,178,0.14),
+    rgba(169,139,255,0.14)
   );
   transition: 0.3s ease;
 }
@@ -145,10 +163,10 @@ html, body {
 
 .box:hover {
   transform: translateY(-10px) scale(1.03);
-  border-color: rgba(127,214,210,0.45);
+  border-color: rgba(127,214,210,0.55);
   box-shadow: 0 30px 160px rgba(0,0,0,0.75),
-              0 0 60px rgba(127,214,210,0.22),
-              0 0 60px rgba(217,164,178,0.18);
+              0 0 70px rgba(127,214,210,0.20),
+              0 0 70px rgba(217,164,178,0.18);
 }
 
 .box h2 {
@@ -213,15 +231,12 @@ html, body {
   background: rgba(255,255,255,0.10);
   backdrop-filter: blur(25px);
   box-shadow: 0 50px 200px rgba(0,0,0,0.85);
-
-  transform: scale(0.92);
-  opacity: 0;
-  transition: 0.3s ease;
+  animation: pop 0.35s ease;
 }
 
-.panel.show .panel-inner {
-  transform: scale(1);
-  opacity: 1;
+@keyframes pop {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .panel-top {
@@ -289,8 +304,10 @@ button {
 button:hover {
   border-color: rgba(127,214,210,0.55);
   transform: translateY(-2px);
-}/* ===============================
-   EMMY (FORCE VISIBLE FIX)
+}
+
+/* ===============================
+   EMMY (FIXED ALWAYS VISIBLE)
    =============================== */
 
 .emy {
@@ -304,7 +321,6 @@ button:hover {
   pointer-events: none;
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translateZ(0);
   animation: emyFloat 3.2s infinite ease-in-out;
 }
 
@@ -330,7 +346,7 @@ button:hover {
   height: 120px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.55), transparent 60%),
-              linear-gradient(135deg, #d9a4b2, #7fd6d2);
+              linear-gradient(135deg, var(--rose), var(--cyan));
   border: 2px solid rgba(255,255,255,0.22);
   position: relative;
   box-shadow: 0 30px 160px rgba(0,0,0,0.9);
